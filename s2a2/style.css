@@ -101,7 +101,7 @@ body {
   background-repeat: no-repeat;
 }
 
-#mz-gallery::-webkit-scrollbar-button:single-button:horizontal:increment {
+#gallery::-webkit-scrollbar-button:single-button:horizontal:increment {
   height: 2.5vw;
   width: 8vw;
   background-color: white;
