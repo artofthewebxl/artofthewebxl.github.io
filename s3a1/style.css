@@ -1,0 +1,67 @@
+body {
+  font-family: Arial, sans-serif;
+  text-align: center;
+  background-color: #f0f0f0;
+  margin: 0;
+  padding: 20px;
+}
+
+h1 {
+  margin-bottom: 10px;
+}
+
+#menu {
+  margin-bottom: 20px;
+}
+
+#gameContainer {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  gap: 20px;
+}
+
+/* Maze canvas fixed at 400x400 */
+#mazeCanvas {
+  border: 2px solid #000;
+  background-color: #fff;
+  margin-top: 20px;
+}
+
+/* Controls panel on the right */
+#controls {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 170px;           /* Set to match the width of the arrow group */
+  max-height: 400px;      /* Same as the maze height */
+  margin-top: 20px;
+  margin-left: 20px;      /* Shifts the entire controls panel further to the right */
+}
+
+/* Uniform arrow buttons */
+#controls button {
+  font-size: 24px;
+  width: 50px;
+  height: 50px;
+  margin: 5px;
+  cursor: pointer;
+}
+
+.horizontal-buttons {
+  display: flex;
+  justify-content: center;
+}
+
+/* Script output box (vertical scroll) */
+#movesOutput {
+  margin-top: 10px;
+  font-size: 16px;
+  width: 170px;          /* Matches the controls panel width */
+  height: 280px;         /* 400px (maze) - ~120px (arrows) = ~280px */
+  border: 1px solid #ccc;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding: 5px;
+  box-sizing: border-box;
+}
