@@ -1,4 +1,5 @@
 // Maze dimensions will change based on difficulty.
+let difficulty = "easy";
 let cols = 10;
 let rows = 10;
 let cellSize;
@@ -141,7 +142,7 @@ function drawMaze() {
 }
 
 // Initialize the canvas.
-function init() {
+function initCanvas() {
   canvas = document.getElementById("mazeCanvas");
   canvas.width = 400;
   canvas.height = 400;
@@ -187,9 +188,8 @@ function checkWin() {
   }
 }
 
-// Start the game: set difficulty (and pastel background), reset state, generate maze, and draw.
+// Start the game: reset state, generate maze, and draw.
 function startGame() {
-  const difficulty = document.getElementById("difficultySelect").value;
   if (difficulty === "easy") {
     cols = 10;
     rows = 10;
@@ -213,7 +213,6 @@ function startGame() {
 }
 
 // Set up event listeners for on-screen buttons.
-document.getElementById("startButton").addEventListener("click", startGame);
 document.getElementById("upButton").addEventListener("click", () => movePlayer("up"));
 document.getElementById("rightButton").addEventListener("click", () => movePlayer("right"));
 document.getElementById("downButton").addEventListener("click", () => movePlayer("down"));
@@ -236,6 +235,11 @@ document.addEventListener("keydown", (e) => {
       break;
   }
 });
+
+function init() {
+  initCanvas();
+  startGame();
+}
 
 // Initialize canvas on window load.
 window.onload = init;
