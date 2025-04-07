@@ -216,12 +216,26 @@ function updateMovesOutput() {
   outputDiv.textContent = "Script: " + recordedMoves.join(", ");
 }
 
+// Function to move to the next difficulty level
+function nextLevel() {
+  if (difficulty === "easy") {
+    difficulty = "medium";
+    alert("Level completed! Proceeding to medium difficulty.");
+  } else if (difficulty === "medium") {
+    difficulty = "hard";
+    alert("Medium level completed! Proceeding to hard difficulty.");
+  } else if (difficulty === "hard") {
+    difficulty = "easy"; // Reset to easy after completing all levels
+    alert("Congratulations! You've completed all difficulty levels!");
+  }
+
+  startGame();
+}
+
 // Check if the player reached the goal.
 function checkWin() {
   if (playerPos.row === rows - 1 && playerPos.col === cols - 1) {
-    setTimeout(() => {
-      alert("You won! Script: " + recordedMoves.join(", "));
-    }, 100);
+    nextLevel();
     return true;
   }
   return false;
@@ -249,6 +263,10 @@ function startGame() {
   cellSize = canvas.width / cols;
   generateMaze();
   drawMaze();
+  
+  // Update displayed difficulty level
+  const titleElement = document.querySelector('h1');
+  titleElement.textContent = `Maze Game - ${difficulty.charAt(0).toUpperCase() + difficulty.slice(1)}`;
 }
 
 // Set up event listeners for on-screen buttons.
@@ -264,15 +282,19 @@ document.getElementById("stopButton").addEventListener("click", () => setIsRecor
 document.addEventListener("keydown", (e) => {
   switch (e.key) {
     case "ArrowUp":
+      e.preventDefault(); // Prevent page scrolling
       recordMove("U");
       break;
     case "ArrowRight":
+      e.preventDefault();
       recordMove("R");
       break;
     case "ArrowDown":
+      e.preventDefault();
       recordMove("D");
       break;
     case "ArrowLeft":
+      e.preventDefault();
       recordMove("L");
       break;
   }
