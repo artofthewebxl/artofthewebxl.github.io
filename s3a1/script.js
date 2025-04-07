@@ -6,7 +6,8 @@ let cellSize;
 let grid = [];
 let canvas, ctx;
 let playerPos = { row: 0, col: 0 };
-let moves = [];
+let recordedMoves = [];
+let isRecording = false;
 
 // Cell constructor with wall information.
 function Cell(row, col) {
@@ -150,42 +151,80 @@ function initCanvas() {
   cellSize = canvas.width / cols;
 }
 
+function drawMenuButtons() {
+  document.getElementById("playButton").disabled = isRecording || recordedMoves.length === 0;
+  document.getElementById("recordButton").disabled = isRecording;
+  document.getElementById("stopButton").disabled = !isRecording;
+}
+
+function setIsRecording(recording) {
+  isRecording = recording;
+  drawMenuButtons();
+}
+
+function playRecording() {
+  let i = 0;
+  let lastTimestamp = 0;
+  const moveDelay = 300; // milliseconds
+  drawMaze();
+
+  function playNextMove(timestamp) {
+    if (i >= recordedMoves.length) {
+      if (!checkWin()) {
+        alert("Failed to reach the goal. Resetting game.");
+        playerPos = { row: 0, col: 0 };
+        recordedMoves = [];
+        updateMovesOutput();
+        drawMenuButtons();
+        drawMaze();
+      }
+      return;
+    }
+    
+    if (timestamp - lastTimestamp >= moveDelay) {
+      const move = recordedMoves[i];
+      const currentCell = grid[playerPos.row][playerPos.col];
+      if (move === "U" && !currentCell.walls.top && playerPos.row > 0) {
+        playerPos.row -= 1;
+      } else if (move === "R" && !currentCell.walls.right && playerPos.col < cols - 1) {
+        playerPos.col += 1;
+      } else if (move === "D" && !currentCell.walls.bottom && playerPos.row < rows - 1) {
+        playerPos.row += 1;
+      } else if (move === "L" && !currentCell.walls.left && playerPos.col > 0) {
+        playerPos.col -= 1;
+      }
+      drawMaze();
+      i++;
+      lastTimestamp = timestamp;
+    }
+    
+    requestAnimationFrame(playNextMove);
+  }
+  
+  requestAnimationFrame(playNextMove);
+}
+
+function recordMove(move) {
+  if (!isRecording) return; 
+  recordedMoves.push(move)
+  updateMovesOutput();
+}
+
 // Update the "Script" output.
 function updateMovesOutput() {
   const outputDiv = document.getElementById("movesOutput");
-  outputDiv.textContent = "Script: " + moves.join(", ");
-}
-
-// Move the player if no wall blocks the way.
-function movePlayer(direction) {
-  const currentCell = grid[playerPos.row][playerPos.col];
-  if (direction === "up" && !currentCell.walls.top && playerPos.row > 0) {
-    playerPos.row -= 1;
-    moves.push("U");
-  } else if (direction === "right" && !currentCell.walls.right && playerPos.col < cols - 1) {
-    playerPos.col += 1;
-    moves.push("R");
-  } else if (direction === "down" && !currentCell.walls.bottom && playerPos.row < rows - 1) {
-    playerPos.row += 1;
-    moves.push("D");
-  } else if (direction === "left" && !currentCell.walls.left && playerPos.col > 0) {
-    playerPos.col -= 1;
-    moves.push("L");
-  } else {
-    return;
-  }
-  updateMovesOutput();
-  drawMaze();
-  checkWin();
+  outputDiv.textContent = "Script: " + recordedMoves.join(", ");
 }
 
 // Check if the player reached the goal.
 function checkWin() {
   if (playerPos.row === rows - 1 && playerPos.col === cols - 1) {
     setTimeout(() => {
-      alert("You won! Script: " + moves.join(", "));
+      alert("You won! Script: " + recordedMoves.join(", "));
     }, 100);
+    return true;
   }
+  return false;
 }
 
 // Start the game: reset state, generate maze, and draw.
@@ -205,7 +244,7 @@ function startGame() {
   }
   initGrid();
   playerPos = { row: 0, col: 0 };
-  moves = [];
+  recordedMoves = [];
   updateMovesOutput();
   cellSize = canvas.width / cols;
   generateMaze();
@@ -213,31 +252,35 @@ function startGame() {
 }
 
 // Set up event listeners for on-screen buttons.
-document.getElementById("upButton").addEventListener("click", () => movePlayer("up"));
-document.getElementById("rightButton").addEventListener("click", () => movePlayer("right"));
-document.getElementById("downButton").addEventListener("click", () => movePlayer("down"));
-document.getElementById("leftButton").addEventListener("click", () => movePlayer("left"));
+document.getElementById("upButton").addEventListener("click", () => recordMove("U"));
+document.getElementById("rightButton").addEventListener("click", () => recordMove("R"));
+document.getElementById("downButton").addEventListener("click", () => recordMove("D"));
+document.getElementById("leftButton").addEventListener("click", () => recordMove("L"));
+document.getElementById("playButton").addEventListener("click", playRecording);
+document.getElementById("recordButton").addEventListener("click", () => setIsRecording(true));
+document.getElementById("stopButton").addEventListener("click", () => setIsRecording(false));
 
 // Listen for keyboard arrow key events.
 document.addEventListener("keydown", (e) => {
   switch (e.key) {
     case "ArrowUp":
-      movePlayer("up");
+      recordMove("U");
       break;
     case "ArrowRight":
-      movePlayer("right");
+      recordMove("R");
       break;
     case "ArrowDown":
-      movePlayer("down");
+      recordMove("D");
       break;
     case "ArrowLeft":
-      movePlayer("left");
+      recordMove("L");
       break;
   }
 });
 
 function init() {
   initCanvas();
+  drawMenuButtons();
   startGame();
 }
 
