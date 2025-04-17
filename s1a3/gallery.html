@@ -1,0 +1,62 @@
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Gallery</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <nav class="navbar">
+      <ul>
+        <li><a href="index.html">Home</a></li>
+        <li><a href="movies.html">Movies</a></li>
+        <li><a href="gallery.html">Gallery</a></li>
+        <li><a href="timeline.html">Timeline</a></li>
+      </ul>
+    </nav>
+
+    <div class="gallery-container">
+      <button class="carousel-btn" id="prev">&#10094;</button>
+      <div class="carousel" id="carousel">
+        <img
+          src="https://nofilmschool.com/media-library/dunkirk.jpg?id=34076822&width=1245&height=700&quality=90&coordinates=0%2C0%2C0%2C0"
+          alt="Scene 1"
+        />
+        <img
+          src="https://m.media-amazon.com/images/S/pv-target-images/98a9d72afd5a7c7cf550ecf871391efaa1428170da9741fc3dbebdac2ce1849f._SX1080_FMjpg_.jpg"
+          alt="Scene 2"
+        />
+        <img
+          src="https://consequence.net/wp-content/uploads/2022/12/oppenheimer-christopher-nolan-practical-effects-nuclear-explosion.jpg"
+          alt="Scene 3"
+        />
+        <img
+          src="https://rotten-tomatoes.go-vip.net/wp-content/uploads/2017/07/19134715/Dark-Knight-Nolan.jpg"
+          alt="Scene 4"
+        />
+      </div>
+      <button class="carousel-btn" id="next">&#10095;</button>
+    </div>
+
+    <script>
+      const carousel = document.getElementById("carousel");
+      const images = carousel.querySelectorAll("img");
+      let index = 0;
+
+      document.getElementById("next").addEventListener("click", () => {
+        index = (index + 1) % images.length;
+        carousel.style.transform = `translateX(-${index * 100}%)`;
+      });
+
+      document.getElementById("prev").addEventListener("click", () => {
+        index = (index - 1 + images.length) % images.length;
+        carousel.style.transform = `translateX(-${index * 100}%)`;
+      });
+
+      setInterval(() => {
+        index = (index + 1) % images.length;
+        carousel.style.transform = `translateX(-${index * 100}%)`;
+      }, 5000);
+    </script>
+  </body>
+</html>

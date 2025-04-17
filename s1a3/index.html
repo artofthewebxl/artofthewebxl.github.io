@@ -1,0 +1,55 @@
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Christopher Nolan</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <nav class="navbar">
+    <ul>
+      <li><a href="index.html">Home</a></li>
+      <li><a href="movies.html">Movies</a></li>
+      <li><a href="gallery.html">Gallery</a></li>
+      <li><a href="timeline.html">Timeline</a></li>
+    </ul>
+  </nav>
+
+  <div class="home-content">
+    <h1>Christopher Nolan</h1>
+    <p>Mind-bending narratives, nonlinear storytelling, and stunning visuals.</p>
+    <img
+      src="https://www.thefilmagazine.com/wp-content/uploads/2023/09/Christopher-Nolan-Ranked-2023.webp"
+      alt="Christopher Nolan"
+    />
+    <p>Upcoming Release: The Odyssey (2026)</p>
+  </div>
+
+  <div id="WR_container_wrapper">
+       <a href="https://heyboobo.github.io/"> <img class="smallimage" id="defaultW" src="web-ring_FINALDEFAULT.png">
+           <img class="hoverW" src="web-ring_WHOVER.png"></a>
+       <a href="https://shekinah-gloryy.github.io/s1fp/"> <img class="smallimage" id="defaultR" src="web-ring_FINALDEFAULT.png">
+           <img class="hoverR" src="web-ring_RHOVER.png"></a>
+  </div>
+    
+  <script>
+    const img = document.querySelector('.home-content img');
+
+    img.addEventListener('mousemove', (e) => {
+      const rect = img.getBoundingClientRect();
+      const x = e.clientX - rect.left;
+      const y = e.clientY - rect.top;
+      const centerX = rect.width / 2;
+      const centerY = rect.height / 2;
+      const deltaX = (x - centerX) / centerX;
+      const deltaY = (y - centerY) / centerY;
+      img.style.transform = `perspective(1000px) rotateY(${deltaX * 50}deg) rotateX(${ -deltaY * 50 }deg)`;
+    });
+
+    img.addEventListener('mouseleave', () => {
+      img.style.transform = 'perspective(1000px) rotateY(0deg) rotateX(0deg)';
+    });
+  </script>
+  
+</body>
+</html>
