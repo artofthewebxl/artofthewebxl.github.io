@@ -11,80 +11,193 @@ import { BlendFunction, KernelSize } from 'postprocessing'
 import * as THREE from 'three'
 import './App.css'
 
+const CIRCLE_CONFIG = {
+  // Default values for circles
+  defaultCircle: {
+    scale: 0.8,
+    position: { x: 0.8, y: 0, z: 0.3 }
+  },
+  
+  // Default values for subcircles
+  subcircles: {
+    xButton: { x: -0.25, y: 0.1, z: 0.02 },
+    linkButton: { x: -0.25, y: -0.1, z: 0.02 },
+    size: 0.05
+  },
+  
+  screenOverrides: {
+    //Clock
+    0: { 
+      position: { x: 0.5, y: 0, z: 0.6 },
+      scale: 0.6,
+      subcircles: {
+        xButton: { x: -0.27, y: 0.06, z: 0.02 },
+        linkButton: { x: -0.27, y: -0.06, z: 0.02 }
+      }
+    },
+    //Still Life
+    1: { 
+      position: { x: 0.4, y: 0, z: 0.2 },
+      scale: 0.8,
+      subcircles: {
+        xButton: { x: 0.25, y: 0.06, z: 0.02 },
+        linkButton: { x: 0.25, y: -0.06, z: 0.02 }
+      }
+    },
+    //XL
+    2: { 
+      position: { x: 0.6, y: 0, z: 0.3 },
+      scale: 0.8,
+      subcircles: {
+        xButton: { x: -0.27, y: 0.06, z: 0.02 },
+        linkButton: { x: -0.27, y: -0.06, z: 0.02 }
+      }
+    },
+    //RR
+    3: { 
+      position: { x: 0.4, y: -0.08, z: 0.6 },
+      scale: 0.7,
+      subcircles: {
+        xButton: { x: -0.27, y: 0.06, z: 0.02 },
+        linkButton: { x: -0.27, y: -0.06, z: 0.02 }
+      }
+    },
+    //N
+    4: { 
+      position: { x: 0.6, y: -0.03, z: 0.3 },
+      scale: 0.7,
+      subcircles: {
+        xButton: { x: -0.27, y: 0.06, z: 0.02 },
+        linkButton: { x: -0.27, y: -0.06, z: 0.02 }
+      }
+    },
+    //ice
+    5: { 
+      position: { x: 0.6, y: 0, z: 0.6 },
+      scale: 0.6,
+      subcircles: {
+        xButton: { x: -0.28, y: 0.06, z: 0.02 },
+        linkButton: { x: -0.28, y: -0.06, z: 0.02 }
+      }
+    },
+    //CN
+    6: { 
+      position: { x: -0.7, y: 0, z: 0.2 },
+      scale: 0.6,
+      subcircles: {
+        xButton: { x: 0.26, y: 0.06, z: 0.02 },  
+        linkButton: { x: 0.26, y: -0.06, z: 0.02 }
+      }
+    },
+    //tree
+    7: { 
+      position: { x: 0.6, y: -.06, z: 0.3 },
+      scale: 0.65,
+      subcircles: {
+        xButton: { x: 0.25, y: 0.06, z: 0.02 },
+        linkButton: { x: 0.25, y: -0.06, z: 0.02 }
+      }
+    },
+    //sleep
+    8: { 
+      position: { x: 0.8, y: -.05, z: 0.3 },
+      scale: 0.4,
+      subcircles: {
+        xButton: { x: 0.25, y: 0.06, z: 0.02 },
+        linkButton: { x: 0.25, y: -0.06, z: 0.02 }
+      }
+    },
+    //maze
+    9: { 
+      position: { x: 0.5, y: -.08, z: 0.2 },
+      scale: 0.6,
+      subcircles: {
+        xButton: { x: -0.26, y: 0.06, z: 0.02 },
+        linkButton: { x: -0.26, y: -0.06, z: 0.02 }
+      }
+    }
+  }
+};
+
 const screenInfo = [
   { 
-    title: "Screen 1", 
-    content: "This is information about screen 1. It contains details about this specific feature.",
-    link: "https://example.com/screen1"
+    title: "Screen 1 (Clock)", 
+    link: "https://editor.p5js.org/ximluo/full/m75E5wBsZ"
   },
   { 
-    title: "Screen 2", 
-    content: "Screen 2 represents another important feature of this device. Here you can learn about its specifications.",
-    link: "https://example.com/screen2"
+    title: "Screen 2 (Still Life)", 
+    link: "https://codepen.io/Ximing-Luo-the-bashful/pen/pvzYewo"
   },
   { 
-    title: "Screen 3", 
-    content: "Screen 3 shows the history and evolution of this technology over time.",
-    link: "https://example.com/screen3"
+    title: "Screen 3 (Portfolio)", 
+    link: "http://ximingluo.com"
   },
   { 
-    title: "Screen 4", 
-    content: "Screen 4 contains technical specifications and compatibility information.",
-    link: "https://example.com/screen4"
+    title: "Screen 4 (readings)", 
+    link: "https://artofthewebxl.github.io/readings/"
   },
   { 
-    title: "Screen 5", 
-    content: "Screen 5 has information about connectivity options available on this device.",
-    link: "https://example.com/screen5"
+    title: "Screen 5 (Music)", 
+    link: "https://artofthewebxl.github.io/s2a2/"
   },
   { 
-    title: "Screen 6", 
-    content: "Screen 6 explains the user interface and accessibility features.",
-    link: "https://example.com/screen6"
+    title: "Screen 6 (Iceberg)", 
+    link: "https://codepen.io/Ximing-Luo-the-bashful/pen/raBqVGB"
   },
   { 
-    title: "Screen 7", 
-    content: "Screen 7 shows the available updates and software features.",
-    link: "https://example.com/screen7"
+    title: "Screen 7 (Movies)", 
+    link: "https://artofthewebxl.github.io/s1a3/"
   },
   { 
-    title: "Screen 8", 
-    content: "Screen 8 presents additional accessories and compatible devices.",
-    link: "https://example.com/screen8"
+    title: "Screen 8 (Trees)", 
+    link: "https://editor.p5js.org/ximluo/full/biJeTuvhd"
   },
   { 
-    title: "Screen 9", 
-    content: "Screen 9 contains warranty information and support options.",
-    link: "https://example.com/screen9"
+    title: "Screen 9 (Sleep)", 
+    link: "https://stevein1020.github.io/s3a2/"
   },
   { 
-    title: "Screen 10", 
-    content: "Screen 10 includes troubleshooting tips and common solutions.",
-    link: "https://example.com/screen10"
+    title: "Screen 10 (maze)", 
+    link: "https://artofthewebxl.github.io/s3a1/"
   },
 ];
 
-function InfoPanel({ activeScreenIndex, closePanel, isMobile }) {
-  if (activeScreenIndex < 0) return null;
-  
-  const info = screenInfo[activeScreenIndex];
+function SubCircle({ position, icon, onClick, onPointerOver, onPointerOut }) {
+  const size = CIRCLE_CONFIG.subcircles.size;
   
   return (
-    <div className="info-panel">
-      <div className="info-content">
-        <h2>{info.title}</h2>
-        <p>{info.content}</p>
-        {/* Link that opens in a new tab instead of close button */}
-        <a 
-          href={info.link} 
-          className="info-link" 
-          target="_blank" 
-          rel="noopener noreferrer"
-        >
-          Learn More
-        </a>
-      </div>
-    </div>
+    <group position={position}>
+      <mesh 
+        onClick={onClick}
+        onPointerOver={onPointerOver}
+        onPointerOut={onPointerOut}
+      >
+        <circleGeometry args={[size, 32]} />
+        <meshStandardMaterial 
+          color="#000000"
+          transparent={true}
+          opacity={0}
+        />
+      </mesh>
+      <mesh>
+        <ringGeometry args={[size - 0.005, size, 32]} />
+        <meshStandardMaterial 
+          color="#ff00ff" 
+          emissive="#ff00ff"
+          emissiveIntensity={0.8}
+          side={THREE.DoubleSide}
+        />
+      </mesh>
+      <Text
+        position={[0, 0, 0.01]}
+        fontSize={size * 0.8}
+        color="#ffffff"
+        anchorX="center"
+        anchorY="middle"
+      >
+        {icon}
+      </Text>
+    </group>
   );
 }
 
@@ -92,63 +205,20 @@ function CircleButton({ position, number, onClick, active, scale = 1, animationO
   const circleRef = useRef()
   const [hovering, setHovering] = useState(false)
   
-  useFrame((state) => {
-    if (circleRef.current) {
-      const time = state.clock.getElapsedTime() + animationOffset
-      
-      switch (number) {
-        case 1:
-          circleRef.current.position.y = Math.sin(time * 0.8) * 0.03
-          circleRef.current.rotation.z = Math.sin(time * 0.5) * 0.05
-          break
-        case 2:
-          circleRef.current.position.x = Math.sin(time * 0.7) * 0.02
-          circleRef.current.rotation.x = Math.sin(time * 0.6) * 0.04
-          break
-        case 3:
-          circleRef.current.position.x = Math.sin(time * 0.5) * 0.02
-          circleRef.current.position.y = Math.cos(time * 0.5) * 0.02
-          circleRef.current.rotation.y = Math.sin(time * 0.4) * 0.06
-          break
-        case 4:
-          circleRef.current.position.x = Math.sin(time * 0.6) * 0.025
-          circleRef.current.position.y = Math.sin(time * 1.2) * 0.015
-          circleRef.current.rotation.z = Math.cos(time * 0.7) * 0.04
-          break
-        case 5:
-          circleRef.current.position.y = Math.abs(Math.sin(time * 0.9)) * 0.03
-          circleRef.current.rotation.x = Math.sin(time * 0.8) * 0.05
-          break
-        case 6:
-          circleRef.current.rotation.x = Math.sin(time * 0.7) * 0.06
-          circleRef.current.rotation.z = Math.cos(time * 0.4) * 0.03
-          circleRef.current.position.z = Math.sin(time * 0.5) * 0.01
-          break
-        case 7:
-          circleRef.current.rotation.y = Math.sin(time * 0.5) * 0.07
-          circleRef.current.position.x = Math.sin(time * 0.3) * 0.01
-          break
-        case 8:
-          circleRef.current.position.x = Math.sin(time * 0.4) * 0.02
-          circleRef.current.position.y = Math.cos(time * 0.5) * 0.02
-          circleRef.current.rotation.z = time * 0.05 % (Math.PI * 2)
-          break
-        case 9:
-          const pulse = 1 + Math.sin(time * 0.6) * 0.03
-          circleRef.current.scale.x = scale * pulse
-          circleRef.current.scale.y = scale * pulse
-          circleRef.current.rotation.y = Math.sin(time * 0.4) * 0.05
-          break
-        case 10:
-          circleRef.current.rotation.z = Math.sin(time * 0.4) * 0.08
-          circleRef.current.position.x = Math.sin(time * 0.6) * 0.015
-          break
-        default:
-          circleRef.current.position.y = Math.sin(time * 0.6) * 0.02
-          circleRef.current.rotation.z = Math.sin(time * 0.4) * 0.03
-      }
-    }
-  })
+  const handleLinkClick = (e) => {
+    e.stopPropagation();
+    window.open(screenInfo[number - 1].link, '_blank');
+  };
+  
+  const handleDeactivateClick = (e) => {
+    e.stopPropagation();
+    onClick(-1);
+  };
+  
+  // Get subcircle positions for this screen
+  const screenIndex = number - 1;
+  const screenConfig = CIRCLE_CONFIG.screenOverrides[screenIndex];
+  const subcircleConfig = screenConfig?.subcircles || CIRCLE_CONFIG.subcircles;
   
   return (
     <group position={position}>
@@ -165,7 +235,7 @@ function CircleButton({ position, number, onClick, active, scale = 1, animationO
           }}
           rotation={[Math.PI / 2, 0, 0]}
         >
-          <cylinderGeometry args={[0.2, 0.2, 0.02, 32]} />
+          <cylinderGeometry args={[0.1, 0.2, 0.02, 32]} />
           <meshStandardMaterial 
             color={active ? "#ff00ff" : "#000000"}
             emissive={active ? "#ff00ff" : "#000000"}
@@ -183,7 +253,7 @@ function CircleButton({ position, number, onClick, active, scale = 1, animationO
             <meshStandardMaterial 
               color="#ff00ff" 
               emissive="#ff00ff"
-              emissiveIntensity={hovering ? 1.2 : 0.5}
+              emissiveIntensity={hovering ? 0.5 : 1.2}
               side={THREE.DoubleSide}
             />
           </mesh>
@@ -197,6 +267,34 @@ function CircleButton({ position, number, onClick, active, scale = 1, animationO
           anchorY="middle"
         >
         </Text>
+        
+        {/* Sub-circles when active */}
+        {active && (
+          <>
+            <SubCircle
+              position={[
+                subcircleConfig.xButton.x,
+                subcircleConfig.xButton.y,
+                subcircleConfig.xButton.z
+              ]}
+              icon="✕"
+              onClick={handleDeactivateClick}
+              onPointerOver={() => document.body.style.cursor = 'pointer'}
+              onPointerOut={() => document.body.style.cursor = 'auto'}
+            />
+            <SubCircle
+              position={[
+                subcircleConfig.linkButton.x,
+                subcircleConfig.linkButton.y,
+                subcircleConfig.linkButton.z
+              ]}
+              icon="↗"
+              onClick={handleLinkClick}
+              onPointerOver={() => document.body.style.cursor = 'pointer'}
+              onPointerOut={() => document.body.style.cursor = 'auto'}
+            />
+          </>
+        )}
       </group>
     </group>
   )
@@ -410,60 +508,17 @@ function ScreenButtons({ screenMeshes, activeScreenIndex, setActiveScreenIndex, 
         const size = new THREE.Vector3();
         boundingBox.getSize(size);
         
-        let offsetPosition;
-        let circleScale = 1;
-
-        if (index === 0) {
-          offsetPosition = [
-            center.x + (size.x * 0.8),
-            center.y,
-            center.z + 0.5
-          ];
-        } else if (index === 3) {
-          offsetPosition = [
-            center.x + (size.x * 0.6),
-            center.y + 0.08,
-            center.z + 0.6
-          ];
-        } else if (index === 5) {
-          offsetPosition = [
-            center.x + (size.x * 0.8),
-            center.y + 0.08,
-            center.z + 0.6
-          ];
-        } else if (index === 1) {
-          offsetPosition = [
-            center.x + (size.x * 0.5),
-            center.y,
-            center.z + 0.2
-          ];
-        } 
-        else if (index === 8) {
-          offsetPosition = [
-            center.x + (size.x * 0.8),
-            center.y,
-            center.z + 0.3
-          ];
-          circleScale = 0.7;
-        } else if (index === 9) {
-          offsetPosition = [
-            center.x + (size.x * 0.6),
-            center.y,
-            center.z + 0.2
-          ];
-        } else if (index === 6) {
-          offsetPosition = [
-            center.x + (size.x * -0.85),
-            center.y,
-            center.z + 0.2
-          ];
-        } else {
-          offsetPosition = [
-            center.x + (size.x * 0.8),
-            center.y,
-            center.z + 0.3
-          ];
-        }
+        // Get the configuration for this screen - now all screens have overrides
+        const screenConfig = CIRCLE_CONFIG.screenOverrides[index];
+        const position = screenConfig.position;
+        const scale = screenConfig.scale;
+        
+        // Calculate the final position
+        const offsetPosition = [
+          center.x + (size.x * position.x),
+          center.y + position.y,
+          center.z + position.z
+        ];
         
         return (
           <CircleButton
@@ -471,7 +526,7 @@ function ScreenButtons({ screenMeshes, activeScreenIndex, setActiveScreenIndex, 
             position={offsetPosition}
             number={index + 1}
             active={index === activeScreenIndex}
-            scale={circleScale}
+            scale={scale}
             animationOffset={index * 0.5}
             onClick={(clickedIndex) => {
               if (clickedIndex === activeScreenIndex) {
@@ -495,35 +550,11 @@ export default function App() {
   const [screenMeshes, setScreenMeshes] = useState([]);
   const [activeScreenIndex, setActiveScreenIndex] = useState(-1);
   const [inDetailView, setInDetailView] = useState(false);
-  const [isMobile, setIsMobile] = useState(false);
   const screenBloomRef = useRef();
-
-  // Check if we're on mobile
-  useEffect(() => {
-    const checkMobile = () => {
-      setIsMobile(window.innerWidth < 768);
-    };
-    
-    checkMobile();
-    window.addEventListener('resize', checkMobile);
-    
-    return () => {
-      window.removeEventListener('resize', checkMobile);
-    };
-  }, []);
-
-  const closePanel = () => {
-    setActiveScreenIndex(-1);
-    setInDetailView(false);
-  };
-
-  const canvasClassName = inDetailView 
-    ? (isMobile ? 'r3f-canvas hidden' : 'r3f-canvas split-view') 
-    : 'r3f-canvas';
 
   return (
     <div className="app-container">
-      <Canvas className={canvasClassName} camera={{ position: [0, 2, 4] }}>
+      <Canvas camera={{ position: [0, 2, 4] }}>
         <color attach="background" args={['#101010']} />
         <ambientLight intensity={0.6} />
         <directionalLight
@@ -582,12 +613,6 @@ export default function App() {
           <Noise blendFunction={BlendFunction.HARD_LIGHT} opacity={0.03} />
         </EffectComposer>
       </Canvas>
-      
-      <InfoPanel 
-        activeScreenIndex={activeScreenIndex} 
-        closePanel={closePanel}
-        isMobile={isMobile}
-      />
     </div>
   )
 }
